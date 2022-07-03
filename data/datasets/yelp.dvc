@@ -1,0 +1,5 @@
+outs:
+- md5: 94a0af7b5f10178732cbf73a444b499d.dir
+  size: 396434102
+  nfiles: 8
+  path: yelp

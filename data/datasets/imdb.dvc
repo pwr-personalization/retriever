@@ -1,0 +1,5 @@
+outs:
+- md5: 05381620a1426f6435bb23224bec8e19.dir
+  size: 262288614
+  nfiles: 8
+  path: imdb

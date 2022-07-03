@@ -1,0 +1,36 @@
+train:
+  method: retriever
+  dataset: MHS_sentiment
+  model: roberta-base
+  num_repeats: 1
+  model_random_state: 2022
+  data_random_state: 2022
+  val_check_interval: 1.0
+  patience: 20
+  num_workers: 8
+  gpus:  [ 0 ]
+  max_epochs: 60
+  warmup_steps: 1000
+  batch_size: 32
+  accumulate_grad_batches: 1
+  learning_rate: 0.00005
+  class_weights:
+  max_length: 512
+  gradient_checkpointing: false
+  freeze_backbone: false
+  feature_normalization: 'none'
+
+baseline: { }
+
+user_identifier:
+  augmentations: random
+  prefix_length: 10
+
+retriever:
+  normalize_weights: false
+  encoder_name: 'cross-encoder/stsb-roberta-base'
+  top_k: 3
+
+retriever_sentiLARE:
+  normalize_weights: false
+  top_k:

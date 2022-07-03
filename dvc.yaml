@@ -1,0 +1,69 @@
+stages:
+    unzip_data:
+        cmd: python scripts/data/run_unzip_data.py
+        deps:
+            - scripts/data/run_unzip_data.py
+            - data/datasets/psmm/raw
+            - data/raw/plwiki.zip
+        outs:
+            - data/datasets/psmm/processed/clips
+            - data/datasets/psmm/processed/projects
+            - data/processed/plwiki
+
+    load_clips:
+        cmd: python scripts/data/run_load_clips.py
+        deps:
+            - scripts/data/run_load_clips.py
+            - data/datasets/psmm/processed/clips
+            - data/datasets/psmm/processed/projects
+        outs:
+            - data/datasets/psmm/processed/clips.csv
+        params:
+            - load_clips.drop_duplicated_texts
+
+    prepare_domain_and_problem_datasets:
+        cmd: python scripts/data/run_prepare_domain_and_problem_datasets.py
+        deps:
+            - scripts/data/run_prepare_domain_and_problem_datasets.py
+            - data/datasets/psmm/processed/clips.csv
+        outs:
+            - data/datasets/psmm/processed/train_problem_dataset.csv
+            - data/datasets/psmm/processed/test_problem_dataset.csv
+            - data/datasets/psmm/processed/domain_dataset.csv
+        params:
+            - prepare_domain_and_problem_datasets.problem_dataset_project_name
+            - prepare_domain_and_problem_datasets.test_size
+            - prepare_domain_and_problem_datasets.seed
+
+    train_classifier:
+        cmd: python scripts/training/run_train_classifier.py
+        deps:
+            - scripts/training/run_train_classifier.py
+            - data/datasets/psmm/processed/train_problem_dataset.csv
+            - data/datasets/psmm/processed/test_problem_dataset.csv
+            - data/models/language_models/domain_dataset_cbow
+            - data/models/language_models/domain_dataset_skipgram
+            - data/models/language_models/plwiki_cbow
+            - data/models/language_models/plwiki_skipgram
+        params:
+            - train_classifier.model
+            - train_classifier.model_random_state
+            - train_classifier.data_random_state
+            - train_classifier.val_size
+            - train_classifier.val_check_interval
+            - train_classifier.num_workers
+            - train_classifier.gpus
+            - train_classifier.precision
+            - train_classifier.class_weights
+            - train_classifier.warmup_steps_ratio
+            - train_classifier.accumulate_grad_batches
+            - transformers.max_steps
+            - transformers.early_stopping_patience
+            - transformers.learning_rate
+            - transformers.batch_size
+            - transformers.freeze_backbone
+            - transformers.gradient_checkpointing
+            - fasttext.max_steps
+            - fasttext.early_stopping_patience
+            - fasttext.learning_rate
+            - fasttext.batch_size

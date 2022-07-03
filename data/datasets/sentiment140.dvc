@@ -1,0 +1,5 @@
+outs:
+- md5: efa01c9d405bead496b7d79bd4584aa5.dir
+  size: 9747337
+  nfiles: 2
+  path: sentiment140
